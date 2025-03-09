@@ -172,7 +172,7 @@ reactiveUtils.watch(
                     console.log(features);
 
                     const fieldNames = {
-                      namefirst: "First Name",
+                      namefrst: "First Name",
                       namelast: "Last Name",
                       occupation: "Occupation",
                       ownership: "Ownership",
@@ -196,7 +196,7 @@ reactiveUtils.watch(
                       year_immigrated: "Year Immigrated"
                     };   
                     
-                    recName.textContent = clickedFeature.attributes.stitle;
+                    recName.textContent = clickedFeature.attributes.namelast + ", " + clickedFeature.attributes.namefrst;
                     table.innerHTML = ""; // Clear existing table content
                     // Populate bootstrap Table with the attributes for the Census record. 
                     for (const key in fieldNames) {
