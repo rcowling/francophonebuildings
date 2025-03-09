@@ -72,7 +72,7 @@
 
         // 1917 sanborn building footprints.
         const FP1917 = new FeatureLayer({
-          url: "https://voyageur.mtu.edu/server/rest/services/Hosted/all_bldg_French_Occ_1910/FeatureServer",
+          url: "https://voyageur.mtu.edu/server/rest/services/Hosted/sanborn_footprints_1917_francophone/FeatureServer",
           id: "sanborn17",
           outFields: ["*"]
         });
@@ -87,7 +87,7 @@
 
         // historical person geocoded record locations layer
         const recLocs = new FeatureLayer({
-          url: "https://voyageur.mtu.edu/server/rest/services/Hosted/Mapped1910Fren_In_Bldg/FeatureServer",
+          url: "https://voyageur.mtu.edu/server/rest/services/Hosted/Mapped1910FCSampleFullCensusFields/FeatureServer",
           id: "reclocs",
           outFields: ["*"]
         });
@@ -117,7 +117,8 @@ reactiveUtils.watch(
         console.log(uniqueID);
         let query = recLocs.createQuery();
         // query the person record locations for all people living in the bldgID
-        query.where = "uniqueid = '" + uniqueID +  "'" ;
+        query.spatialRelationship = "intersects";
+        query.geometry = graphic.geometry;
         query.outFields = ["*"];
         // execute the query for the historical records based on the id of the building clicked
         recLocs.queryFeatures(query)
@@ -142,8 +143,8 @@ reactiveUtils.watch(
                     <h5 class="mb-1">${user_namefrst}, ${user_namelast}</h5>
                     <small class="text-muted">${user_year ? user_year : '1910'}</small>
                   </div>
-                  <p class="mb-1">${occupation}</p>
-                  <small class="text-muted">${age}</small>
+                  <p class="mb-1">${occupation ? occupation: 'No occupation listed'}</p>
+                  <small class="text-muted">Age ${age}</small>
                 </a>
               `;
 
@@ -158,16 +159,17 @@ reactiveUtils.watch(
 
                 // Access the clicked feature's attributes
                 const clickedFeature = features[index];
-                const recId = clickedFeature.attributes.recordid;
+                const recId = clickedFeature.attributes.pid;
                 // For the clicked record, query any census records for that person
-                let censusQuery = censusRecs.createQuery();
-                censusQuery.where = "recordid = '" + recId + "'" ; // use the person records ID number in the Census Records layer
+                let censusQuery = recLocs.createQuery();
+                censusQuery.where = "pid = '" + recId + "'" ; // use the person records ID number in the Census Records layer
                 censusQuery.outFields = ["*"];
                 // Execute the query for a persons' census records
-                censusRecs.queryFeatures(censusQuery)
+                recLocs.queryFeatures(censusQuery)
                   .then(function(response) {
                     if (response.features.length > 0) {
                     const features = response.features[0].attributes;
+                    console.log(features);
 
                     const fieldNames = {
                       namefirst: "First Name",
