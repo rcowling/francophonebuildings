@@ -9,13 +9,34 @@
     <script src="https://js.arcgis.com/4.31/"></script>
 
     <style>
-      html,
-      body,
+
+      /*Navbar height*/
+    .navbar {
+      height: 56.5px;  
+    }  
+
+     /*Main Navbar Title and Logo*/
+     .navbar-brand {
+        padding: 0 15px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;    
+     }
+
+      /*Map container*/
       #viewDiv {
+        position: absolute;
+        top: 0;
+        bottom: 0;        
         padding: 0;
-        margin: 0;
-        height: 100%;
+        margin-top: 56px;        
         width: 100%;
+      }
+
+      #sidebar {
+        margin-top: 56px;
       }
 
       .esri-ui .esri-popup  {
@@ -97,9 +118,7 @@
           url: "https://portal1-geo.sabu.mtu.edu/server/rest/services/Hosted/cesnsus_records_allyears/FeatureServer",
           id: "cenrecs",
           outFields: ["*"]
-        }); 
-
-      
+        });       
 
         // popup template for the footprints layer
         FP1917.popupTemplate = {
@@ -174,16 +193,22 @@ reactiveUtils.watch(
                     const fieldNames = {
                       namefrst: "First Name",
                       namelast: "Last Name",
+                      labforce: "Labor Force",
                       occupation: "Occupation",
+                      indstr: "Industry",
+                      classwkr: "Worker Class",
                       ownership: "Ownership",
                       race: "Race",
                       relhouse: "Relation to Householder",
                       industry: "Industry",
                       age: "Age",
                       birthplace: "Birthplace",
-                      birthyear: "Birth Year",
-                      canread: "Can Read",
-                      canwrite: "Can Write",
+                      nativity: "nativity",
+                      marst: "Marital Status", 
+                      birthyr: "Birth Year",
+                      lit: "Literate",
+                      fbpl: "Father Birthplace",
+                      mbpl: "Mother Birthplace",
                       censusyear: "Census Year",
                       citizenship: "Citizenship",
                       fbirthplace: "Father's Birthplace",
@@ -193,7 +218,11 @@ reactiveUtils.watch(
                       speaks: "Other Languages Spoken",
                       sex: "Sex",
                       wrkrclass: "Worker Class",
-                      year_immigrated: "Year Immigrated"
+                      year_immigrated: "Year Immigrated",
+                      hhtype: "Household Type",
+                      famsize: "Family Size",
+                      citizen: "Citizenship"
+                     
                     };   
                     
                     recName.textContent = clickedFeature.attributes.namelast + ", " + clickedFeature.attributes.namefrst;
@@ -263,6 +292,13 @@ reactiveUtils.watch(
          <div class="list-group" id="list-group"></div>
       </div>
     </div>
+    <!-- Image and text -->
+<nav class="navbar navbar-light bg-light">
+  <a class="navbar-brand" href="#">
+    <img src="logo.png" width="50" height="50" class="d-inline-block align-top" alt="">
+    &nbsp;Where Francophones Lived in 1910
+  </a>
+</nav>
     <div id="viewDiv"></div>
     
   </body>
